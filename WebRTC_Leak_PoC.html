@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<body>
+    <p>Click to test for WebRTC leaks:</p>
+    <button id="test-button">WebRTC Leak Test</button>
+    <div id="ip-display"></div>
+
+    <script>
+        document.getElementById('test-button').addEventListener('click', () => {
+            const ipDisplay = document.getElementById('ip-display');
+            ipDisplay.innerHTML = '';
+
+            const discoverIPs = (onNewIP) => {
+                const peerConnection = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+                const ipAddressPattern = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g;
+                const uniqueIPs = new Set();
+
+                peerConnection.createDataChannel("");
+
+                peerConnection.createOffer()
+                  .then(offer => peerConnection.setLocalDescription(offer))
+
+                peerConnection.onicecandidate = event => {
+                    if (event.candidate) {
+                        event.candidate.candidate.match(ipAddressPattern)?.forEach(ip => {
+                            if (!uniqueIPs.has(ip)) {
+                                uniqueIPs.add(ip);
+                                onNewIP(ip);
+                            }
+                        });
+                    }
+                };
+            };
+
+            discoverIPs(ip => {
+                const ipElement = document.createElement('div');
+                ipElement.textContent = ip; // Set the text content to the IP address
+                ipDisplay.appendChild(ipElement); // Add the new element to the container
+            });
+        });
+    </script>
+</body>
+</html>
