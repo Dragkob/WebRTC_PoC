@@ -1,7 +1,7 @@
 # WebRTC Leak PoC
 The code uploaded here was originally taken from: https://github.com/VoidSec/WebRTC-Leak then edited and re-optimised by me.
 
-Don't forget to check my research: https://dragkob.notion.site/webrtc-leak-the-backdoor-to-vpn-anonymity
+Don't forget to check my research: https://www.dragkob.com/articles/webrtc-leak
 
 Don't forget to check VoidSec's research: https://voidsec.com/vpn-leak
 
